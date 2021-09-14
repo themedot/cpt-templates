@@ -11,48 +11,50 @@ Text Domain: custompost-demo
 Domain Path: /languages
 */
 
-function cpdemo_plugin_textdomain(){
+// require_once();
+
+function cptdemo_plugin_textdomain(){
     load_plugin_textdomain('custompost-demo',false,plugin_dir_path(__FILE__).'/languages');
 }
-add_action( 'plugin_loaded','cpdemo_plugin_textdomain' );
+add_action( 'plugin_loaded','cptdemo_plugin_textdomain' );
 
 
-// Register Custom Post Type Custom Post
-// Post Type Key: Custom Post
-function create_custom_post_cpt() {
+// Register Recipe Type Recipe
+// Post Type Key: Recipe
+function cptdemo_register_cpt_recipe() {
 
     $labels = array(
-        'name' => _x( 'Custom Posts', 'Post Type General Name', 'textdomain' ),
-        'singular_name' => _x( 'Custom Post', 'Post Type Singular Name', 'textdomain' ),
-        'menu_name' => _x( 'Custom Posts', 'Admin Menu text', 'textdomain' ),
-        'name_admin_bar' => _x( 'Custom Post', 'Add New on Toolbar', 'textdomain' ),
-        'archives' => __( 'Custom Post', 'textdomain' ),
-        'attributes' => __( 'Custom Post', 'textdomain' ),
-        'parent_item_colon' => __( 'Custom Post', 'textdomain' ),
-        'all_items' => __( 'All Custom Posts', 'textdomain' ),
-        'add_new_item' => __( 'Add New Custom Post', 'textdomain' ),
+        'name' => _x( 'Recipes', 'Post Type General Name', 'textdomain' ),
+        'singular_name' => _x( 'Recipe', 'Post Type Singular Name', 'textdomain' ),
+        'menu_name' => _x( 'Recipes', 'Admin Menu text', 'textdomain' ),
+        'name_admin_bar' => _x( 'Recipe', 'Add New on Toolbar', 'textdomain' ),
+        'archives' => __( 'Recipe', 'textdomain' ),
+        'attributes' => __( 'Recipe', 'textdomain' ),
+        'parent_item_colon' => __( 'Recipe', 'textdomain' ),
+        'all_items' => __( 'All Recipes', 'textdomain' ),
+        'add_new_item' => __( 'Add New Recipe', 'textdomain' ),
         'add_new' => __( 'Add New', 'textdomain' ),
-        'new_item' => __( 'New Custom Post', 'textdomain' ),
-        'edit_item' => __( 'Edit Custom Post', 'textdomain' ),
-        'update_item' => __( 'Update Custom Post', 'textdomain' ),
-        'view_item' => __( 'View Custom Post', 'textdomain' ),
-        'view_items' => __( 'View Custom Posts', 'textdomain' ),
-        'search_items' => __( 'Search Custom Post', 'textdomain' ),
+        'new_item' => __( 'New Recipe', 'textdomain' ),
+        'edit_item' => __( 'Edit Recipe', 'textdomain' ),
+        'update_item' => __( 'Update Recipe', 'textdomain' ),
+        'view_item' => __( 'View Recipe', 'textdomain' ),
+        'view_items' => __( 'View Recipes', 'textdomain' ),
+        'search_items' => __( 'Search Recipe', 'textdomain' ),
         'not_found' => __( 'Not found', 'textdomain' ),
         'not_found_in_trash' => __( 'Not found in Trash', 'textdomain' ),
         'featured_image' => __( 'Featured Image', 'textdomain' ),
         'set_featured_image' => __( 'Set featured image', 'textdomain' ),
         'remove_featured_image' => __( 'Remove featured image', 'textdomain' ),
         'use_featured_image' => __( 'Use as featured image', 'textdomain' ),
-        'insert_into_item' => __( 'Insert into Custom Post', 'textdomain' ),
-        'uploaded_to_this_item' => __( 'Uploaded to this Custom Post', 'textdomain' ),
-        'items_list' => __( 'Custom Posts list', 'textdomain' ),
-        'items_list_navigation' => __( 'Custom Posts list navigation', 'textdomain' ),
-        'filter_items_list' => __( 'Filter Custom Posts list', 'textdomain' ),
+        'insert_into_item' => __( 'Insert into Recipe', 'textdomain' ),
+        'uploaded_to_this_item' => __( 'Uploaded to this Recipe', 'textdomain' ),
+        'items_list' => __( 'Recipes list', 'textdomain' ),
+        'items_list_navigation' => __( 'Recipes list navigation', 'textdomain' ),
+        'filter_items_list' => __( 'Filter Recipes list', 'textdomain' ),
     );
     
     $args = array(
-        'label' => __( 'Custom Post', 'textdomain' ),
+        'label' => __( 'Recipe', 'textdomain' ),
         'description' => __( 'description', 'textdomain' ),
         'labels' => $labels,
         'menu_icon' => 'dashicons-admin-appearance',
@@ -73,7 +75,18 @@ function create_custom_post_cpt() {
         'show_in_rest' => true,
     );
     
-    register_post_type( 'custompost', $args );
+    register_post_type( 'Recipe', $args );
 
 }
-add_action( 'init', 'create_custom_post_cpt', 0 );
+add_action( 'init', 'cptdemo_register_cpt_recipe', 0 );
+
+function cptdemo_recipe_template($file){
+    global $post;
+    if ('recipe'==$post->post_type) {
+        $file_path = plugin_dir_path(__FILE__).'/cpt-templates/single-recipe.php';
+        $file = $file_path;
+    }
+    return $file;
+}
+
+add_filter( 'single_template', 'cptdemo_recipe_template');
